@@ -1,0 +1,1414 @@
+/************************************************************************************
+
+  SIMPLE CSS
+
+  An almost class-less stylesheet for quick results with minimal effort
+  Most HTML elements will be styled effectively out of the box, including
+  main heading, navigation, sections/articles/divs, lists, tables, forms, etc.
+
+  Steve Copley, Waimea College
+
+*************************************************************************************
+
+  Some extras:
+   - Light / dark mode applied based on system mode and/or class="light/dark"
+   - A large 'hero' style panel is supported via class="hero"
+   - Responsive section/article/div columns are supported via class="columns"
+   - Full-width section/article/div are supported via class="full-width"
+   - Blocks can be styled as 'cards' via class="card"
+   - Links can be styled as buttons via class="button"
+   - Buttons/text/cards can be highlighted via class="success/warning/error/accent"
+   - Blocks/text can be aligned via class="left/right/centred"
+   - Required form fields are marked automatically if empty
+   - Responsive navigation menu, either within header, or outside is supported
+   - Responsive mobile-style navigation menu is suppoorted via a checkbox toggle:
+
+        <header>
+            <h1>Main Heading</h1>
+
+            <nav>
+                <label for="toggle">Open</label>
+                <input id="toggle" type="checkbox">
+
+                <ul>
+                    <label for="toggle">Close</label>
+
+                    <li><a href="#">Link</a></li>
+                    <li><a href="#">Link</a></li>
+                    ...
+                </ul>
+            </nav>
+        </header>
+
+*************************************************************************************
+
+  Version history
+
+  1.0    2023-03-03 - Initial release
+
+  1.1    2023-03-03 - Tweaks to nav link hover
+                    - Ability to specify number of columns in std. content width
+
+  1.2    2023-03-06 - Added styling for embedded videos and YouTube iframes
+                    - Added block alignment classes: .left .right .middle
+                    - Defaulted alignment of images and video to centred
+
+  1.3    2023-03-07 - Cleaned up colour naming
+                    - Tweaked button highlighting
+                    - Added colours for user prefers dark mode / class="light/dark"
+
+  1.4    2023-03-15 - Made it easier to modify card / form / table / header / footer
+                      colours, with sensible defaults
+                    - Tweaked slightly the light / dark backgrounds
+                    - Added scrollbar colouring
+                    - Added easy hero image
+
+  1.5    2023-03-17 - Alignment helper classes now aligns text too
+
+  1.6    2023-03-20 - Refined the display of forms to be a bit more modern
+                    - Cards now have shadows to raise them off the page a little
+                    - Buttons and link cards now have shadows on hover
+                    - Colours tweaked (again!)
+                    - Added shadow / glow to hero text
+                    - Forms within cards don't get additional 'card' styling
+
+  1.7    2023-03-21 - Fixed alignment problems, changed .middle to .centred
+                    - Cards that are not in a columns container now have gaps between
+                    - Main header elements now align better at various screen sizes
+                    - Blocks / text directly within <body> or <main> now spaced better
+                    - Lowered specicifity of many selectors to allow easier overriding
+
+*************************************************************************************/
+
+
+
+
+/* Colours, Images and Spacing
+ * Overide these values in your stylesheet (loaded after this)
+ *************************************************************/
+
+ :root {
+
+    color-scheme: light dark;
+
+    /*** HERO IMAGE **************************/
+
+    --hero-image:                    url(hero.jpg);
+
+    /*** WIDTH & COLS **************************/
+
+    --content-max-width:  60rem;
+    --cols-in-max-width:  3;
+
+    /*** LIGHT MODE **************************/
+
+    --light-text-colour:             #111;
+    --light-text-inv-colour:         #fff;
+
+    --light-accent-colour:           #c09;
+    --light-accent-hint-colour:      #c092;
+
+    --light-link-colour:             #07d;
+    --light-button-colour:           #07d;
+
+    --light-back-colour:             #fff;
+    --light-back-alt-colour:         #f7f7f7;
+
+    --light-header-back-colour:      #fff;
+    --light-footer-back-colour:      var(--light-accent-colour);
+
+    --light-card-back-colour:        #fff;
+    --light-menu-panel-back-colour:  #222;
+
+    --light-button-highlight-colour: #fff1;
+    --light-button-disabled-colour:  #0002;
+    --light-text-disabled-colour:    #0008;
+
+    --light-form-back-colour:        var(--light-card-back-colour);
+    --light-input-back-colour:       var(--light-accent-hint-colour);
+
+    --light-table-back-colour:       var(--light-card-back-colour);
+    --light-table-alt-back-colour:   var(--light-accent-hint-colour);
+
+    --light-success-colour:          #373;
+    --light-warning-colour:          #e60;
+    --light-error-colour:            #f43;
+
+    --light-border-colour:           #999;
+
+    --light-glow-colour:             #0002;
+    --light-shadow-colour:           #0002;
+    --light-shadow-deep-colour:      #0004;
+
+    --light-code-back-colour:        #111;
+    --light-code-text-colour:        #7ad;
+
+    --light-scrollbar-colour:        #999;
+    --light-scrollbar-back-colour:   #ddd;
+
+    /*** DARK MODE **************************/
+
+    --dark-text-colour:              #ddd;
+    --dark-text-inv-colour:          #000;
+
+    --dark-accent-colour:            #d0a;
+    --dark-accent-hint-colour:       #d0a3;
+
+    --dark-link-colour:              #07d;
+    --dark-button-colour:            #047;
+
+    --dark-back-colour:              #090909;
+    --dark-back-alt-colour:          #0c0c0c;
+
+    --dark-header-back-colour:       #000;
+    --dark-footer-back-colour:       var(--dark-accent-colour);
+    --dark-card-back-colour:         #000;
+    --dark-menu-panel-back-colour:   #222;
+
+    --dark-button-highlight-colour:  #fff2;
+    --dark-button-disabled-colour:   #fff2;
+    --dark-text-disabled-colour:     #fff8;
+
+    --dark-form-back-colour:         var(--dark-card-back-colour);
+    --dark-input-back-colour:        var(--dark-accent-hint-colour);
+
+    --dark-table-back-colour:        var(--dark-card-back-colour);
+    --dark-table-alt-back-colour:    var(--dark-accent-hint-colour);
+
+    --dark-success-colour:           #373;
+    --dark-warning-colour:           #e60;
+    --dark-error-colour:             #f43;
+
+    --dark-border-colour:            #333;
+
+    --dark-glow-colour:              #fff2;
+    --dark-shadow-colour:            #0004;
+    --dark-shadow-deep-colour:       #0008;
+
+    --dark-code-back-colour:         #000;
+    --dark-code-text-colour:         #7ad;
+
+    --dark-scrollbar-colour:         #444;
+    --dark-scrollbar-back-colour:    #070707;
+
+    /*** SPACING **************************/
+
+    --gap:                 2.0rem;
+
+    --padding:             3.0rem;
+    --padding-medium:      2.0rem;
+    --padding-small:       1.0rem;
+    --padding-tiny:        0.3rem;
+    --padding-text:        0.6em;
+    --padding-text-small:  0.3em;
+
+    --border-radius:       0.15em;
+
+    --shadow-size-tiny:    0.3rem;
+    --shadow-size-small:   0.5rem;
+    --shadow-size-medium:  1.0rem;
+    --shadow-size-large:   2.0rem;
+}
+
+
+
+:root {
+    --text-colour:             var(--light-text-colour);
+    --text-inv-colour:         var(--light-text-inv-colour);
+    --accent-colour:           var(--light-accent-colour);
+    --accent-hint-colour:      var(--light-accent-hint-colour);
+    --link-colour:             var(--light-link-colour);
+    --button-colour:           var(--light-button-colour);
+    --back-colour:             var(--light-back-colour);
+    --back-alt-colour:         var(--light-back-alt-colour);
+    --header-back-colour:      var(--light-header-back-colour);
+    --footer-back-colour:      var(--light-footer-back-colour);
+    --card-back-colour:        var(--light-card-back-colour);
+    --menu-panel-back-colour:  var(--light-menu-panel-back-colour);
+    --button-highlight-colour: var(--light-button-highlight-colour);
+    --button-disabled-colour:  var(--light-button-disabled-colour);
+    --text-disabled-colour:    var(--light-text-disabled-colour);
+    --form-back-colour:        var(--light-form-back-colour);
+    --input-back-colour:       var(--light-input-back-colour);
+    --table-back-colour:       var(--light-table-back-colour);
+    --table-alt-back-colour:   var(--light-table-alt-back-colour);
+    --success-colour:          var(--light-success-colour);
+    --warning-colour:          var(--light-warning-colour);
+    --error-colour:            var(--light-error-colour);
+    --border-colour:           var(--light-border-colour);
+    --glow-colour:             var(--light-glow-colour);
+    --shadow-colour:           var(--light-shadow-colour);
+    --shadow-deep-colour:      var(--light-shadow-deep-colour);
+    --code-back-colour:        var(--light-code-back-colour);
+    --code-text-colour:        var(--light-code-text-colour);
+    --scrollbar-colour:        var(--light-scrollbar-colour);
+    --scrollbar-back-colour:   var(--light-scrollbar-back-colour);
+}
+
+@media screen and (prefers-color-scheme: dark) {
+    :root {
+        --text-colour:             var(--dark-text-colour);
+        --text-inv-colour:         var(--dark-text-inv-colour);
+        --accent-colour:           var(--dark-accent-colour);
+        --accent-hint-colour:      var(--dark-accent-hint-colour);
+        --link-colour:             var(--dark-link-colour);
+        --button-colour:           var(--dark-button-colour);
+        --back-colour:             var(--dark-back-colour);
+        --back-alt-colour:         var(--dark-back-alt-colour);
+        --header-back-colour:      var(--dark-header-back-colour);
+        --footer-back-colour:      var(--dark-footer-back-colour);
+        --card-back-colour:        var(--dark-card-back-colour);
+        --menu-panel-back-colour:  var(--dark-menu-panel-back-colour);
+        --button-highlight-colour: var(--dark-button-highlight-colour);
+        --button-disabled-colour:  var(--dark-button-disabled-colour);
+        --text-disabled-colour:    var(--dark-text-disabled-colour);
+        --form-back-colour:        var(--dark-form-back-colour);
+        --input-back-colour:       var(--dark-input-back-colour);
+        --table-back-colour:       var(--dark-table-back-colour);
+        --table-alt-back-colour:   var(--dark-table-alt-back-colour);
+        --success-colour:          var(--dark-success-colour);
+        --warning-colour:          var(--dark-warning-colour);
+        --error-colour:            var(--dark-error-colour);
+        --border-colour:           var(--dark-border-colour);
+        --glow-colour:             var(--dark-glow-colour);
+        --shadow-colour:           var(--dark-shadow-colour);
+        --shadow-deep-colour:      var(--dark-shadow-deep-colour);
+        --code-back-colour:        var(--dark-code-back-colour);
+        --code-text-colour:        var(--dark-code-text-colour);
+        --scrollbar-colour:        var(--dark-scrollbar-colour);
+        --scrollbar-back-colour:   var(--dark-scrollbar-back-colour);
+    }
+}
+
+.light {
+    --text-colour:             var(--light-text-colour);
+    --text-inv-colour:         var(--light-text-inv-colour);
+    --accent-colour:           var(--light-accent-colour);
+    --accent-hint-colour:      var(--light-accent-hint-colour);
+    --link-colour:             var(--light-link-colour);
+    --button-colour:           var(--light-button-colour);
+    --back-colour:             var(--light-back-colour);
+    --back-alt-colour:         var(--light-back-alt-colour);
+    --header-back-colour:      var(--light-header-back-colour);
+    --footer-back-colour:      var(--light-footer-back-colour);
+    --card-back-colour:        var(--light-card-back-colour);
+    --menu-panel-back-colour:  var(--light-menu-panel-back-colour);
+    --button-highlight-colour: var(--light-button-highlight-colour);
+    --button-disabled-colour:  var(--light-button-disabled-colour);
+    --text-disabled-colour:    var(--light-text-disabled-colour);
+    --form-back-colour:        var(--light-form-back-colour);
+    --input-back-colour:       var(--light-input-back-colour);
+    --table-back-colour:       var(--light-table-back-colour);
+    --table-alt-back-colour:   var(--light-table-alt-back-colour);
+    --success-colour:          var(--light-success-colour);
+    --warning-colour:          var(--light-warning-colour);
+    --error-colour:            var(--light-error-colour);
+    --border-colour:           var(--light-border-colour);
+    --glow-colour:             var(--light-glow-colour);
+    --shadow-colour:           var(--light-shadow-colour);
+    --shadow-deep-colour:      var(--light-shadow-deep-colour);
+    --code-back-colour:        var(--light-code-back-colour);
+    --code-text-colour:        var(--light-code-text-colour);
+    --scrollbar-colour:        var(--light-scrollbar-colour);
+    --scrollbar-back-colour:   var(--light-scrollbar-back-colour);
+}
+
+.dark {
+    --text-colour:             var(--dark-text-colour);
+    --text-inv-colour:         var(--dark-text-inv-colour);
+    --accent-colour:           var(--dark-accent-colour);
+    --accent-hint-colour:      var(--dark-accent-hint-colour);
+    --link-colour:             var(--dark-link-colour);
+    --button-colour:           var(--dark-button-colour);
+    --back-colour:             var(--dark-back-colour);
+    --back-alt-colour:         var(--dark-back-alt-colour);
+    --header-back-colour:      var(--dark-header-back-colour);
+    --footer-back-colour:      var(--dark-footer-back-colour);
+    --card-back-colour:        var(--dark-card-back-colour);
+    --menu-panel-back-colour:  var(--dark-menu-panel-back-colour);
+    --button-highlight-colour: var(--dark-button-highlight-colour);
+    --button-disabled-colour:  var(--dark-button-disabled-colour);
+    --text-disabled-colour:    var(--dark-text-disabled-colour);
+    --form-back-colour:        var(--dark-form-back-colour);
+    --input-back-colour:       var(--dark-input-back-colour);
+    --table-back-colour:       var(--dark-table-back-colour);
+    --table-alt-back-colour:   var(--dark-table-alt-back-colour);
+    --success-colour:          var(--dark-success-colour);
+    --warning-colour:          var(--dark-warning-colour);
+    --error-colour:            var(--dark-error-colour);
+    --border-colour:           var(--dark-border-colour);
+    --glow-colour:             var(--dark-glow-colour);
+    --shadow-colour:           var(--dark-shadow-colour);
+    --shadow-deep-colour:      var(--dark-shadow-deep-colour);
+    --code-back-colour:        var(--dark-code-back-colour);
+    --code-text-colour:        var(--dark-code-text-colour);
+    --scrollbar-colour:        var(--dark-scrollbar-colour);
+    --scrollbar-back-colour:   var(--dark-scrollbar-back-colour);
+}
+
+
+/* OVERALL LAYOUT
+ *************************************************************/
+
+html {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+    margin:  0;
+    padding: 0;
+}
+
+html,
+body {
+    min-height: 100vh;
+}
+
+
+body {
+    display: flex;
+    flex-direction: column;
+    --side-padding: var(--padding-small);
+    --num-cols: var(--cols-in-max-width);
+    --num-gaps: calc(var(--cols-in-max-width) - 1);
+}
+
+@media screen and (min-width: 50rem) {
+    body {
+        --side-padding: var(--padding-medium);
+    }
+}
+
+
+main {
+    flex: 1;
+}
+
+
+p:not(:first-child) {
+    margin-top: var(--gap);
+}
+
+p:not(:last-child) {
+    margin-bottom: var(--gap);
+}
+
+body > p:not(:first-child) {
+    margin-top: calc(var(--gap) / 2 );
+}
+
+body > p:not(:last-child) {
+    margin-bottom: calc(var(--gap) / 2 );
+}
+
+
+/* ALIGNMENT
+ *************************************************************/
+
+.centred {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.left {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.right {
+    margin-right: 0;
+    margin-left: auto;
+}
+
+.full-width {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+:where(h1,h2,h3,h4,h5,h6,p).centred {
+    text-align: center;
+}
+
+:where(h1,h2,h3,h4,h5,h6,p).left {
+    text-align: left;
+}
+
+:where(h1,h2,h3,h4,h5,h6,p).right {
+    text-align: right;
+}
+
+
+
+/* BASE COLOURS
+ *************************************************************/
+
+body {
+    color: var(--text-colour);
+    background-color: var(--back-colour);
+}
+
+:where(h1,h2,h3,h4,h5,h6) {
+    color: var(--accent-colour);
+}
+
+
+/* SHADOWS
+ *************************************************************/
+body {
+    --ambient-shadow-tiny:     0 calc(var(--shadow-size-tiny) / 6)   calc(var(--shadow-size-tiny) / 2)   var(--shadow-deep-colour);
+    --key-light-shadow-tiny:   0 calc(var(--shadow-size-tiny) / 2)   var(--shadow-size-tiny)             var(--shadow-colour);
+    --ambient-shadow-small:    0 calc(var(--shadow-size-small) / 6)  calc(var(--shadow-size-small) / 2)  var(--shadow-deep-colour);
+    --key-light-shadow-small:  0 calc(var(--shadow-size-small) / 2)  var(--shadow-size-small)            var(--shadow-colour);
+    --ambient-shadow-medium:   0 calc(var(--shadow-size-medium) / 6) calc(var(--shadow-size-medium) / 2) var(--shadow-deep-colour);
+    --key-light-shadow-medium: 0 calc(var(--shadow-size-medium) / 2) var(--shadow-size-medium)           var(--shadow-colour);
+    --ambient-shadow-large:    0 calc(var(--shadow-size-large) / 6)  calc(var(--shadow-size-large) / 2)  var(--shadow-deep-colour);
+    --key-light-shadow-large:  0 calc(var(--shadow-size-large) / 2)  var(--shadow-size-large)            var(--shadow-colour);
+
+    --shadow-tiny:   var(--ambient-shadow-tiny),   var(--key-light-shadow-tiny);
+    --shadow-small:  var(--ambient-shadow-small),  var(--key-light-shadow-small);
+    --shadow-medium: var(--ambient-shadow-medium), var(--key-light-shadow-medium);
+    --shadow-large:  var(--ambient-shadow-large),  var(--key-light-shadow-large);
+}
+
+
+/* SCROLLBAR COLOURS
+ *************************************************************/
+
+body {
+    scrollbar-color: var(--scrollbar-colour) var(--scrollbar-back-colour);
+}
+
+body::-webkit-scrollbar {
+    width: 13px;
+    height: 13px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-colour);
+    border-radius: 3px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-colour);
+}
+
+body::-webkit-scrollbar-track {
+    background: var(--scrollbar-back-colour);
+    box-shadow: inset 0 0 3px var(--shadow-colour);
+}
+
+
+/* TEXT
+ *************************************************************/
+
+html {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size:   16px;
+    line-height: 1.5;
+}
+
+:where(h1,h2,h3,h4,h5,h6) {
+    font-weight: normal;
+    line-height: 1;
+    padding: 0;
+    margin: 1em 0 0.7em;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+:where(body, main) > :where(h1,h2,h3,h4,h5,h6):first-child {
+    margin: 1.5em 0 1.0em;
+}
+
+h1 { font-size: 2.4em; }
+h2 { font-size: 2.0em; }
+h3 { font-size: 1.7em; }
+h4 { font-size: 1.5em; }
+h5 { font-size: 1.3em; }
+h6 { font-size: 1.2em; }
+
+small {
+    font-size: 0.8rem;
+}
+
+sub,
+sup {
+    font-size: 0.7rem;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+b,
+strong {
+    font-weight: bold;
+}
+
+blockquote {
+    font-size: 1.2em;
+    padding: var(--padding-text-small) var(--padding-text);
+    margin: var(--gap) 0;
+    box-shadow: inset var(--padding-text-small) 0 var(--accent-colour);
+}
+
+
+/* LINKS
+ *************************************************************/
+
+a {
+    color: var(--link-colour);
+    text-decoration: none;
+    box-shadow: none;
+    border-bottom: 1px solid transparent;
+    transition: background-color    200ms,
+                color               200ms,
+                box-shadow          200ms,
+                border-color        200ms;
+}
+
+a:active,
+a:hover {
+    outline: none;
+    border-bottom-color: var(--link-colour);
+}
+
+
+/* MESSAGES
+ *************************************************************/
+
+.accent,
+.accent > * {
+    color: var(--accent-colour);
+}
+
+.success,
+.success > * {
+    color: var(--success-colour);
+}
+
+.warning,
+.warning > * {
+    color: var(--warning-colour);
+}
+
+.error,
+.error > * {
+    color: var(--error-colour);
+}
+
+
+
+/* MAIN HEADER
+ *************************************************************/
+
+body > header {
+    padding: var(--padding-small) var(--side-padding);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--gap);
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 99;
+    background-color: var(--header-back-colour);
+    box-shadow: var(--shadow-medium);
+}
+
+body > header > :where(div, section, article, nav, aside, p) {
+    padding: 0;
+    margin: 0;
+}
+
+
+body > header h1 {
+    color: var(--text-colour);
+    font-size: 1.6em;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+}
+
+
+@media screen and (min-width: 64em) {
+    body > header h1 {
+        font-size: 2em;
+    }
+}
+
+
+
+/* MAIN FOOTER
+ *************************************************************/
+
+body > footer {
+    padding: 2rem;
+    text-align: center;
+    background-color: var(--footer-back-colour);
+    color: var(--text-inv-colour);
+}
+
+
+
+/* MAIN NAV
+ *************************************************************/
+nav {
+    position: relative;
+}
+
+nav ul {
+    width: calc( 100vw - (2 * var(--side-padding)) );
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    font-size: 1.2rem;
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 0;
+    text-align: center;
+}
+
+nav a {
+    padding: var(--padding-text-small) var(--padding-text);
+    border: none;
+    color: var(--accent-colour);
+    border-radius: var(--border-radius);
+}
+
+nav a:hover {
+    background-color: var(--button-colour);
+    box-shadow: inset 0 0 0 99em var(--button-highlight-colour), var(--shadow-tiny);
+    color: var(--light-text-inv-colour);
+    border: none;
+}
+
+/* nav has a toggle input feature */
+
+nav [type=checkbox] {
+    display: none;
+    margin: 0;
+}
+
+nav [type=checkbox] ~ ul {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: -20rem;
+    width: 20rem;
+    z-index: 999;
+    overflow-x: hidden;
+
+    flex-direction: column;
+    justify-content: flex-start;
+
+    padding: var(--side-padding);
+    padding-top: calc(1.5 * var(--padding));
+    overflow-y: auto;
+
+    background-color: var(--menu-panel-back-colour);
+}
+
+nav [type=checkbox]:checked ~ ul {
+    right: 0;
+}
+
+nav [type=checkbox] ~ ul a {
+    color: var(--accent-colour);
+    display: block;
+}
+
+nav [type=checkbox] ~ ul a:hover {
+    color: var(--light-text-inv-colour);
+}
+
+nav label {
+    visibility: hidden;
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+nav label::before {
+    visibility: visible;
+}
+
+nav > label {
+    position: absolute;
+    top: -12px;
+    right: 0;
+    fill: red;
+}
+
+nav ul > label {
+    position: absolute;
+    right: var(--side-padding);
+    top: calc(var(--padding-small) + 0.5rem);
+}
+
+nav > label::before {
+    content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z' fill='black'/%3E%3C/svg%3E");
+}
+
+body.dark nav > label::before {
+    filter: invert(1);
+}
+
+@media screen and (prefers-color-scheme: dark) {
+    nav > label::before {
+        filter: invert(1);
+    }
+}
+
+nav ul > label::before {
+    content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z' fill='white'/%3E%3C/svg%3E");
+}
+
+
+/* Nav is directly in body, not part of header */
+
+body > nav ul {
+    width: 100%;
+    padding: var(--padding) var(--side-padding);
+    gap: var(--padding-small);
+}
+
+
+@media screen and (min-width: 64em) {
+    nav ul {
+        width: auto;
+    }
+
+    nav [type=checkbox] ~ ul {
+        position: static;
+        width: auto;
+
+        flex-direction: row;
+
+        padding: var(--padding-tiny);
+        overflow-y: initial;
+
+        font-size: inherit;
+        background-color: transparent;
+
+        transition: none;
+    }
+
+    nav a,
+    nav [type=checkbox] ~ ul a {
+        color: var(--accent-colour);
+    }
+
+    nav a:hover,
+    nav [type=checkbox] ~ ul a:hover {
+        color: var(--light-text-inv-colour);
+    }
+
+    nav label {
+        display: none;
+    }
+}
+
+
+
+/* HERO SECTION
+ *************************************************************/
+
+ .hero {
+    width: 100%;
+    max-width: 100%;
+}
+
+.hero {
+    min-height: 75vh;
+    font-size: min(2rem, 7vw);
+
+    display: grid;
+    gap: var(--gap);
+    place-content: center;
+    align-items: center;
+
+    background-color: var(--accent-colour);
+
+    background-image: var(--hero-image);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.hero > * {
+    color: var(--text-inv-colour);
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    text-shadow: 0 0.05em 0.1em var(--glow-colour);
+}
+
+.hero h1 {
+    font-size: 3em;
+    font-weight: bold;
+}
+
+.hero h2 {
+    font-size: 1.5em;
+}
+
+
+
+/* PAGE SECTIONS
+ *************************************************************/
+body {
+    --side-padding-calc: max( var(--side-padding), calc( (100% - var(--content-max-width)) / 2 ) );
+}
+
+:where(article, section, aside, div) {
+    padding: var(--padding) var(--side-padding);
+    scroll-margin-top: calc(var(--padding) + 1rem) ;
+    color: var(--text-colour);
+}
+
+:where(body, main) > :where(article, section, aside, div, h1, h2, h3, h4, h5, h6, p):where(:not(.hero):not(.full-width)) {
+    padding-left: var(--side-padding-calc);
+    padding-right: var(--side-padding-calc);
+}
+
+:where(body, main) > :where(article, section, aside, div):where(:not(.hero):not(.card)):nth-of-type(odd) {
+    background-color: var(--back-colour);
+}
+
+:where(body, main) > :where(article, section, aside, div):where(:not(.hero):not(.card)):nth-of-type(even) {
+    background-color: var(--back-alt-colour);
+}
+
+:where(article, section, aside, div, .card) > :first-child,
+:where(article, section, aside, div, .card) > :where(header, footer) > :first-child {
+    margin-top: 0;
+}
+
+:where(article, section, aside, div, .card) > :last-child,
+:where(article, section, aside, div, .card) > :where(header, footer) > :last-child {
+    margin-bottom: 0;
+}
+
+:where(article, section, aside, div, .card) > header {
+    margin-bottom: var(--gap);
+}
+
+:where(article, section, aside, div, .card) > footer {
+    margin-top: var(--gap);
+}
+
+
+
+/* COLUMNS
+ *************************************************************/
+
+.columns {
+    --column-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap);
+}
+
+.columns > header,
+.columns > footer {
+    width: 100%;
+}
+
+.columns > :where(section, article, aside, div) {
+    padding: var(--padding-small) 0;
+    width: var(--column-width);
+}
+
+@media screen and (min-width: 60rem) {
+    .columns {
+        --column-width: calc((100% - (calc(var(--num-gaps) + 0) * var(--gap))) / calc(var(--num-cols) + 0));
+    }
+}
+
+@media screen and (min-width: 90rem) {
+    .columns.full-width {
+        --column-width: calc((100% - (calc(var(--num-gaps) + 1) * var(--gap))) / calc(var(--num-cols) + 1));
+    }
+}
+
+@media screen and (min-width: 120rem) {
+    .columns.full-width {
+        --column-width: calc((100% - (calc(var(--num-gaps) + 2) * var(--gap))) / calc(var(--num-cols) + 2));
+    }
+}
+
+@media screen and (min-width: 150rem) {
+    .columns.full-width {
+        --column-width: calc((100% - (calc(var(--num-gaps) + 3) * var(--gap))) / calc(var(--num-cols) + 3));
+    }
+}
+
+.columns > .card {
+    /* display: block;
+    padding: var(--padding-medium);
+    border: 1px solid var(--border-colour);
+    background-color: var(--card-back-colour);
+    box-shadow: var(--shadow-small); */
+    width: var(--column-width);
+}
+
+.columns > .card:not(:last-of-type) {
+    margin-bottom: 0;
+}
+
+
+
+/* CARDS
+ *************************************************************/
+
+ .card {
+    display: block;
+    padding: var(--padding-medium);
+    border: 1px solid var(--border-colour);
+    background-color: var(--card-back-colour);
+    box-shadow: var(--shadow-small);
+}
+
+.card:not(:last-of-type) {
+    margin-bottom: var(--gap);
+}
+
+:where(body, main) > .card {
+    margin-left: var(--side-padding-calc);
+    margin-right: var(--side-padding-calc);
+    padding: var(--padding-medium);
+}
+
+.card.accent {
+    border-color: var(--accent-colour);
+}
+
+.card.success {
+    border-color: var(--success-colour);
+}
+
+.card.warning {
+    border-color: var(--warning-colour);
+}
+
+.card.error {
+    border-color: var(--error-colour);
+}
+
+a.card {
+    color: var(--text-colour);
+}
+
+a.card:hover,
+a.card:focus {
+    border-color: var(--link-colour);
+    box-shadow: var(--shadow-large);
+}
+
+
+
+/* LISTS
+ *************************************************************/
+
+ol,
+ul {
+    padding-left: var(--padding-medium);
+}
+
+li {
+    margin: var(--padding-text-small) 0;
+}
+
+li::marker {
+    color: var(--accent-colour);
+}
+
+
+/* MEDIA
+ *************************************************************/
+
+:where(img, picture, video, audio, canvas, svg, figure, iframe) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: var(--gap) auto;
+}
+
+figure {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding-small);
+    align-items: center;
+}
+
+figure :where(img, picture, svg) {
+    margin: 0;
+}
+
+figcaption {
+    font-style: italic;
+}
+
+video,
+iframe {
+    aspect-ratio: 16 / 9;  /* should be ok for majority */
+    height: auto;
+}
+
+.bordered {
+    border: 1px solid var(--border-colour);
+}
+
+
+
+/* TABLES
+ *************************************************************/
+
+table {
+    border-collapse: collapse;
+    border-spacing:  0;
+    text-align: left;
+    margin: var(--gap) auto;
+    border: 1px solid var(--border-colour);
+    background-color: var(--table-back-colour);
+    display: block;
+    overflow-x: auto;
+    max-width: max-content;
+    width: 100%;
+}
+
+
+td,
+th {
+    padding: var(--padding-text-small) var(--padding-text);
+}
+
+th {
+    text-align: left;
+    font-weight: bold;
+    color: var(--text-inv-colour);
+    background-color: var(--accent-colour);
+}
+
+tr:nth-child(even) {
+    background: var(--table-alt-back-colour);
+}
+
+
+
+/* BUTTONS
+ *************************************************************/
+
+ :is(button, .button, [type=submit]) {
+    display: inline-block;
+    margin: var(--padding-tiny) 0;
+    padding: var(--padding-text-small) var(--padding-text);
+    width: auto;
+    height: auto;
+
+    font: inherit;
+    letter-spacing: inherit;
+    text-align: center;
+    vertical-align: baseline;
+
+    cursor: pointer;
+    user-select: none;
+
+    background-color: var(--button-colour);
+    color: var(--light-text-inv-colour);
+    box-shadow: inset 0 0 0 transparent;
+
+    border: none;
+    border-radius: var(--border-radius);
+
+    transition: all 200ms;
+}
+
+:where(button, .button, [type=submit]).accent {
+    background-color: var(--accent-colour);
+}
+
+:where(button, .button, [type=submit]).success {
+    background-color: var(--success-colour);
+}
+
+:where(button, .button, [type=submit]).warning {
+    background-color: var(--warning-colour);
+}
+
+:where(button, .button, [type=submit]).error {
+    background-color: var(--error-colour);
+}
+
+:where(button, .button, [type=submit]):hover,
+:where(button, .button, [type=submit]):focus {
+    box-shadow: inset 0 0 0 99em var(--button-highlight-colour), var(--shadow-tiny);
+    border: none;
+}
+
+:where(button, .button, [type=submit]):active {
+    box-shadow: inset 0 0 0 99em var(--shadow-colour);
+    border: none;
+}
+
+:is(button[disabled], button.disabled, .button.disabled, input[disabled]) {
+    box-shadow: none;
+    color: var(--text-disabled-colour);
+    background-color: var(--button-disabled-colour);
+    cursor: not-allowed;
+}
+
+:is(button[disabled], button.disabled, .button.disabled, input[disabled]):active {
+    pointer-events: none;
+}
+
+
+/* FORMS
+ *************************************************************/
+
+form {
+    width: 100%;
+    max-width: 30rem;
+    padding: var(--gap);
+    margin: var(--gap) auto;
+
+    border: 1px solid var(--border-colour);
+    background-color: var(--form-back-colour);
+    box-shadow: var(--shadow-small);
+}
+
+/* Assume forms in cards don't need to be styled as a 'card'*/
+.card form {
+    max-width: 100%;
+    padding: 0;
+
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+
+form header {
+    margin-bottom: var(--gap);
+}
+
+form footer {
+    margin-top: var(--gap);
+}
+
+form :first-child {
+    margin-top: 0;
+}
+
+form :last-child {
+    margin-bottom: 0;
+}
+
+
+/* Labels and legends */
+
+label {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--padding-text);
+    align-items: center;
+    color: var(--accent-colour);
+    margin: var(--padding-small) 0 0;
+}
+
+legend {
+    border: 0;
+    padding: 0;
+    color: var(--accent-colour);
+}
+
+
+/* Fieldsets */
+
+fieldset {
+    border: 0;
+    padding: 0;
+    margin-top: var(--padding-small);
+}
+
+:not(:where([type=checkbox], [type=radio])) + label + fieldset {
+    margin-top: 0;
+}
+
+
+/* Styling of controls */
+
+:where(input, optgroup, select, textarea) {
+    color: inherit;
+    font: inherit;
+    margin: 0;
+    display: block;
+    width: 100%;
+}
+
+input {
+    line-height: normal;
+}
+
+textarea {
+    overflow: auto;
+}
+
+optgroup {
+    font-weight: bold;
+}
+
+:where(input, textarea, select) {
+    line-height: 1.5;
+    height: 2.1em;
+    padding: var(--padding-text-small) var(--padding-text);
+    border: none;
+    border-bottom: 3px solid var(--border-colour);
+    color: var(--text-colour);
+    background-color: var(--input-back-colour);
+    transition: all 200ms;
+}
+
+:where(input, textarea, select):focus {
+    border-bottom-color: var(--accent-colour);
+    outline: 0;
+}
+
+:where(input[type=checkbox], input[type=radio], input[type=range]):focus {
+    outline: 2px solid var(--accent-colour);
+    border-radius: var(--border-radius);
+}
+
+[type=color] {
+    width: 4em;
+    padding: 0 var(--padding-text);
+}
+
+:where([type=number], [type=date]) {
+    width: 10em;
+}
+
+select {
+    width: max-content;
+}
+
+textarea {
+    height: auto;
+}
+
+:where([type=checkbox], [type=radio]) {
+    height: 1.2em;
+    width: 1.2em;
+    display: inline-block;
+}
+
+:where([type=checkbox], [type=radio], [type=range]) {
+    accent-color: var(--accent-colour);
+}
+
+:where([type=file], [type=color]) {
+    cursor: pointer;
+}
+
+[type=file] {
+    height: auto;
+}
+
+
+/* Checkbox and radio button tweaks */
+
+:where(input, textarea, select, fieldset) + :where([type=checkbox], [type=radio]) {
+    margin-top: var(--padding-medium);
+}
+
+:where([type=checkbox], [type=radio]) + label {
+    display: inline-block;
+    margin-left: var(--padding-text-small);
+    margin-right: var(--padding-small);
+    margin-top: 0;
+    vertical-align: text-bottom;
+}
+
+fieldset :where(label, [type=checkbox], [type=radio]) {
+    margin-top: 0;
+}
+
+
+/* Submit button */
+
+:where(input, textarea, select, label, fieldset) + [type=submit] {
+    display: block;
+    margin-top: var(--gap);
+}
+
+
+/* Required / invalid fields */
+
+input[required]:invalid,
+textarea[required]:invalid {
+    padding-right: calc(2 * var(--padding-text));
+    background-image: url('data:image/svg+xml,<svg viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg"><line id="line" y1="1.023" y2="5.002" style="stroke: rgb(218, 85, 85); stroke-linecap: round;" x1="3.02" x2="3.02" transform="matrix(0.5, 0.866025, -0.866025, 0.5, 4.118901, -1.109147)"/><line id="line" y1="1.023" y2="5.002" style="stroke: rgb(218, 85, 85); stroke-linecap: round;" x1="3.02" x2="3.02" transform="matrix(-0.5, 0.866025, -0.866025, -0.5, 7.138902, 1.903354)"/><line id="line" y1="1.023" y2="5.002" style="stroke: rgb(218, 85, 85); stroke-linecap: round;" x1="3.02" x2="3.02"/></svg>');
+    background-size: 1em 1em;
+    background-position: calc(100% - var(--padding-text-small)) center;
+    background-repeat: no-repeat;
+}
+
+textarea[required]:invalid {
+    background-position: calc(100% - var(--padding-text-small)) var(--padding-text-small);
+}
+
+
+
+/* CODE
+ *************************************************************/
+
+code {
+    padding: var(--padding-text-small) var(--padding-text);
+    font-family: monospace;
+    color: var(--code-text-colour);
+    background: var(--code-back-colour);
+    border: 1px solid var(--border-colour);
+    border-radius: var(--border-radius);
+}
+
+pre {
+    font-family: monospace;
+    font-size: 1em;
+    text-align: left;
+    overflow: auto;
+    margin: var(--gap) 0;
+}
+
+pre code {
+    padding: var(--padding-small);
+    display: block;
+    width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+

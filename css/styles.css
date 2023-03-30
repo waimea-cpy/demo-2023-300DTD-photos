@@ -1,0 +1,36 @@
+body.dark #photo img,
+body.dark .photo img {
+    border: 1px solid #fff;
+}
+
+body.light #photo img,
+body.light .photo img {
+    border: 1px solid #333;
+}
+
+
+#photo footer,
+.comment footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    color: #888;
+    padding-top: 0.5rem;
+    border-top: 1px solid  #8888;
+}
+
+#photo footer p,
+.comment footer p {
+    margin: 0;
+}
+
+.photo img {
+    object-fit: cover;
+    aspect-ratio: 16/9;
+}
+
+/* #user-details {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+} */
